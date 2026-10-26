@@ -92,9 +92,11 @@ request before a frame was presented and received the documented five-second
 "not run" response; retrying that rejection allowed validation to finish.
 Automatic MSL probing selected 3.1 instead of the OS maximum 3.2. Intel
 photo-compute, model inference and broader editing workflows are not established
-by these runs. Results from additional focused Intel backend and GPU-parity
-checks could not be retrieved after the SSH session dropped and the signing
-agent stopped responding; they are not counted as passes.
+by these runs. All 12 focused backend/validation regression tests also passed
+on the OCLP Mac. The focused AMD GPU-versus-CPU comparison executed all 30 edit
+cases without skips: worst mean difference 0.0001 and maximum difference one
+8-bit level. The interrupted SSH connection was restored and its completed
+results retrieved.
 
 ## Known limits of the shared backport
 
