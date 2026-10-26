@@ -60,43 +60,36 @@ on a dual-GPU Mac.
 On Apple M4 Max, an isolated native run used Metal for both the window and
 photo rendering, applied +0.35 exposure to a synthetic 512 × 384 PNG and exported
 it without a reported GPU fallback. The completed Detail view and native
-screenshot were checked; the screenshot did not use the headless fallback.
-The debug window responded after approximately two seconds.
+screenshot were visually inspected. The debug window responded after
+approximately two seconds.
 
-The first workspace test run without the optional font input had 4,928 passes,
-one failure and 38 ignored tests before Cargo stopped. The failure was
-`accessibility::every_interactive_node_has_a_name_in_every_view_and_tool`:
-missing U+25B8 (`▸`). Full CI passed on retry with the documented `CRAFT_FONTS_DIR`
-input from `storytold/craft-fonts`, commit
+Both the [Clippy prerequisite](https://github.com/storytold/lightcraft/pull/3085)
+and this compatibility branch independently passed all eight `cargo xtask ci`
+stages: formatting, strict workspace Clippy, HEIF, tests/doctests, parity,
+layers, assets and WebAssembly. Validation used Rust 1.96.1 and the documented
+`CRAFT_FONTS_DIR` input from `storytold/craft-fonts`, commit
 `aced4137c022f1f587624d48e81ec77e1914a9cc`. No fonts are added to this PR.
-Standalone doctests, architecture, assets, parity and WebAssembly checks passed.
-The separate [Clippy prerequisite](https://github.com/storytold/lightcraft/pull/3085)
-passed all eight full-CI stages with this font input. The compatibility branch independently passed all eight `cargo xtask ci`
-stages with the same font input: formatting, strict workspace Clippy, HEIF,
-tests/doctests, parity, layers, assets and WebAssembly. The log reports 5,183
-passes and 42 ignored tests; the CI report records 147 availability-skip entries
-for corpus data, models and missing script-specific fonts.
+The full-CI log reports 5,183 passes and 42 ignored tests; the CI report records
+147 availability-skip entries for corpus data, models and missing
+script-specific fonts.
 
-On MacBookPro11,5, macOS 15.8.1 through OCLP, the native build and strict
-workspace Clippy and all 83 app tests passed. Separate native runs confirmed
-AMD Radeon R9 M370X
-and Intel Iris Pro Graphics for the window. Both used AMD for photo compute,
-completed the synthetic photo's +0.35 exposure edit and PNG export without a
-reported GPU fallback, and produced native screenshots that were visually
-inspected. Internal indirect-call validation remained enabled; external Metal
-validation layers were disabled for these runs.
+On MacBookPro11,5 running macOS 15.8.1 through OCLP:
 
-The debug window responded after approximately 64 seconds with the AMD window
-and 63 seconds with the Intel window. The first test attempt sent a control
-request before a frame was presented and received the documented five-second
-"not run" response; retrying that rejection allowed validation to finish.
-Automatic MSL probing selected 3.1 instead of the OS maximum 3.2. Intel
-photo-compute, model inference and broader editing workflows are not established
-by these runs. All 12 focused backend/validation regression tests also passed
-on the OCLP Mac. The focused AMD GPU-versus-CPU comparison executed all 30 edit
-cases without skips: worst mean difference 0.0001 and maximum difference one
-8-bit level. The interrupted SSH connection was restored and its completed
-results retrieved.
+- Native build, strict workspace Clippy, all 83 app tests and all 12 focused
+  backend/validation regression tests passed.
+- Separate runs confirmed AMD Radeon R9 M370X and Intel Iris Pro Graphics for
+  the window. Both used AMD for photo compute, completed the synthetic photo's
+  +0.35 exposure edit and PNG export without a reported GPU fallback, and
+  produced native screenshots that were visually inspected.
+- All 30 focused AMD GPU-versus-CPU edit comparisons passed without skips:
+  worst mean difference 0.0001 and maximum difference one 8-bit level.
+- The debug window responded after approximately 64 seconds with the AMD
+  window and 63 seconds with the Intel window. Automatic MSL probing selected
+  3.1 instead of the OS maximum 3.2.
+
+Internal indirect-call validation remained enabled; external Metal validation
+layers were disabled on OCLP. These runs do not establish Intel photo-compute,
+model-inference or broader editing-workflow coverage.
 
 ## Known limits of the shared backport
 
